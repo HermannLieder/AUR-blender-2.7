@@ -48,6 +48,10 @@ source=("git://git.blender.org/blender.git${_fragment}"
         cycles.patch
         openexr3.patch
         opencolorio1.patch
+        platform_unix.patch
+        cycles_CMakeLists.patch
+        oiio_CMakeLists.patch
+        FindOpenImageIO.patch
         )
 sha256sums=('SKIP'
             'SKIP'
@@ -64,7 +68,11 @@ sha256sums=('SKIP'
             'edfd784f8497417660c0b9fdc97893fd0d77764d0bc10f4cb92a9082f41bae75'
             'd245f02d73bd5b767ffa49d369383d7cd6ae5e57b89c2975a78c1015e1884864'
             'e7d75a5ef5cb6452b45f6e1e80b6fe69e2630878b1f4f6d53bf0e36ced237712'
-            'b3fa6ef21383287d0f8e7c3b848f3cf02186f9e3a0e8f194f3ca1323935e5e0e')
+            'b3fa6ef21383287d0f8e7c3b848f3cf02186f9e3a0e8f194f3ca1323935e5e0e'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP')
 
 pkgver() {
 # shellcheck disable=SC2164
@@ -79,6 +87,14 @@ prepare() {
     git -C "$srcdir/blender" apply -v "${srcdir}"/SelectCudaComputeArch.patch
   fi
   git -C "$srcdir/blender" apply -v "${srcdir}"/{python3.7,stl_export_iter,python3.{8,9,9_2},openvdb{7,8},cycles,open{exr3,colorio1}}.patch
+  
+  grep -rIlZ _PyUnicode_AsStringAndSize "$srcdir/" | xargs -0 sed -i 's/_PyUnicode_AsStringAndSize/PyUnicode_AsUTF8AndSize/g'
+  sed -i '/s/_Py_HashDouble((double)/_Py_HashDouble(NULL, (double)/' "$srcdir/blender/source/blender/python/mathutils/mathutils.c"
+
+  git -C "$srcdir/blender" apply -v "${srcdir}"/platform_unix.patch
+  git -C "$srcdir/blender" apply -v "${srcdir}"/cycles_CMakeLists.patch
+  git -C "$srcdir/blender" apply -v "${srcdir}"/oiio_CMakeLists.patch
+  git -C "$srcdir/blender" apply -v "${srcdir}"/FindOpenImageIO.patch
 }
 
 build() {
@@ -111,6 +127,7 @@ build() {
         -DWITH_PYTHON_INSTALL=OFF \
         -DPYTHON_VERSION="${_pyver}" \
         -DWITH_LLVM=ON \
+        -DCMAKE_CXX_FLAGS="-I /usr/include/ffmpeg4.4/ -L /usr/lib/ffmpeg4.4/" \
         "${_CMAKE_FLAGS[@]}"
   export NINJA_STATUS="[%p | %f<%r<%u | %cbps ] "
 # shellcheck disable=SC2086 # allow MAKEFLAGS to split when multiple flags provided.

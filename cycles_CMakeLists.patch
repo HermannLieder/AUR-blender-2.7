@@ -1,0 +1,12 @@
+diff --git a/intern/cycles/CMakeLists.txt b/intern/cycles/CMakeLists.txt
+index d4a613a..d1f132a 100644
+--- a/intern/cycles/CMakeLists.txt
++++ b/intern/cycles/CMakeLists.txt
+@@ -22,6 +22,7 @@ include(cmake/macros.cmake)
+ # todo: this code could be refactored a bit to avoid duplication
+ # note: CXX_HAS_SSE is needed in case passing SSE flags fails altogether (gcc-arm)
+ 
++set(CMAKE_CXX_STANDARD 14)
+ if(WITH_CYCLES_NATIVE_ONLY)
+ 	set(CXX_HAS_SSE FALSE)
+ 	set(CXX_HAS_AVX FALSE)

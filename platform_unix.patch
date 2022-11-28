@@ -1,0 +1,13 @@
+diff --git a/src/blender/build_files/cmake/platform/platform_unix.cmake b/platform_unix.cmake
+index ff4c31d..9b9abeb 100644
+--- a/build_files/cmake/platform/platform_unix.cmake
++++ b/build_files/cmake/platform/platform_unix.cmake
+@@ -174,7 +174,7 @@ if(WITH_CODEC_FFMPEG)
+ 	mark_as_advanced(FFMPEG)
+ 
+ 	# lame, but until we have proper find module for ffmpeg
+-	set(FFMPEG_INCLUDE_DIRS ${FFMPEG}/include)
++	set(FFMPEG_INCLUDE_DIRS ${FFMPEG}/include/ffmpeg4.4)
+ 	if(EXISTS "${FFMPEG}/include/ffmpeg/")
+ 		list(APPEND FFMPEG_INCLUDE_DIRS "${FFMPEG}/include/ffmpeg")
+ 	endif()

@@ -1,0 +1,12 @@
+diff --git a/source/blender/imbuf/intern/oiio/CMakeLists.txt b/source/blender/imbuf/intern/oiio/CMakeLists.txt
+index a4fb9c5..f28651c 100644
+--- a/source/blender/imbuf/intern/oiio/CMakeLists.txt
++++ b/source/blender/imbuf/intern/oiio/CMakeLists.txt
+@@ -45,6 +45,7 @@ set(SRC
+ )
+ 
+ if(WITH_OPENIMAGEIO)
++	set(CMAKE_CXX_STANDARD 14)
+ 	list(APPEND INC_SYS
+ 		${OPENIMAGEIO_INCLUDE_DIRS}
+ 		${BOOST_INCLUDE_DIR}
